@@ -15,22 +15,23 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    firstName: "Andrés",
-                    lastName: "Ortega",
-                    now: new Date()
+                    state: "(• ᴖ •)",
+                    happy: false,
                 };
             },
-            computed: {
-                fullName() {
-                    return this.firstName + " " + this.lastName;
-                },
-                today() {
-                    return this.now.toLocaleDateString();
+            watch: {
+                happy(value) {
+                    if (value) {
+                        this.state = "(˶ᵔ ᵕ ᵔ˶)"
+                    } else {
+                        this.state = "(• ᴖ •)"
+                    }
                 }
             },
             template: `
-            <div>{{ fullName }}</div>
-            <div>{{ today }}</div>
+            <div>{{ state }}</div>
+            <br>
+            <button @click="happy = !happy">{{ happy ? "Turn sad" : "Turn happy"}}</button>
             `,
         }).mount("#app")  
     </script>
