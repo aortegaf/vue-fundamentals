@@ -17,26 +17,29 @@
                 return {
                     state: "(⁠╥⁠﹏⁠╥⁠)",
                     happy: false,
-                    styles: {
-                        backgroundColor: "#c1d2ff"
-                    },
                 };
             },
             watch: {
                 happy(value) {
                     if (value) {
                         this.state = "◝(ᵔᗜᵔ)◜"
-                        this.styles.backgroundColor = "#fffd9a"
                     } else {
                         this.state = "(⁠╥⁠﹏⁠╥⁠)"
-                        this.styles.backgroundColor = "#c1d2ff"
                     }
                 }
             },
+            computed: {
+                buttonLabel() {
+                    return this.happy ? "Turn sad" : "Turn happy";
+                },
+                styles() {
+                    return this.happy ? ['happy'] : ['sad']
+                }
+            },
             template: `
-            <div class="container" :style="styles">
+            <div class="container" :class="styles">
                 <h1>{{ state }}</h1>
-                <button @click="happy = !happy">{{ happy ? "Turn sad" : "Turn happy"}}</button>
+                <button @click="happy = !happy">{{ buttonLabel }}</button>
             </div>
             `,
         }).mount("#app")  
@@ -67,6 +70,14 @@
         background-color: white;
         padding: 8px 24px;
         border-radius: 12px;
+    }
+
+    .sad {
+        background-color: #c1d2ff;
+    }
+
+    .happy {
+        background-color: #fffd9a;
     }
 </style>
 
