@@ -15,14 +15,21 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    img_url: "https://.........",
-                    attr: "alt",
+                    counter: 0,
                 };
             },
+            methods: {
+                increment() {
+                    this.counter++;
+                },
+                decrement() {
+                    this.counter--;
+                }
+            },
             template: `
-            <img v-bind:src="img_url" v-bind:alt="img_url">
-            <br>
-            <img v-bind:[attr]="img_url">
+            <p>{{ counter }}</p>
+            <button v-on:click="decrement">-</button>
+            <button v-on:click="increment">+</button>
             `,
         }).mount("#app")  
     </script>
