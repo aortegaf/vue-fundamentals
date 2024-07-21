@@ -15,31 +15,36 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    state: "(⁠╥⁠﹏⁠╥⁠)",
-                    happy: false,
+                    username: "",
+                    logged: false,
                 };
             },
-            watch: {
-                happy(value) {
-                    if (value) {
-                        this.state = "◝(ᵔᗜᵔ)◜"
-                    } else {
-                        this.state = "(⁠╥⁠﹏⁠╥⁠)"
-                    }
-                }
-            },
             computed: {
-                buttonLabel() {
-                    return this.happy ? "Turn sad" : "Turn happy";
-                },
                 styles() {
                     return this.happy ? ['happy'] : ['sad']
                 }
             },
+            watch: {
+                logged(value) {
+                    if (!value) {
+                        this.username = "";
+                    }
+                }
+            },
             template: `
             <div class="container" :class="styles">
-                <h1>{{ state }}</h1>
-                <button @click="happy = !happy">{{ buttonLabel }}</button>
+                <div class="centered" v-if="!logged">
+                    <h1>Who are you</h1>
+                    <input type="text" v-model="username"/>
+                </div>
+                <div v-else>
+                    Hi, {{ username }}
+                </div>
+            
+                <button @click="logged = !logged">
+                    <div v-if="!logged">Login</div>
+                    <div v-else>Logout</div>                    
+                </button>
             </div>
             `,
         }).mount("#app")  
@@ -62,6 +67,13 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
+    }
+
+    .centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     }
 
     button {
