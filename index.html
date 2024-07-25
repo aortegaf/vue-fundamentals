@@ -17,11 +17,23 @@
                 return {
                     username: "",
                     logged: false,
+                    posts: [{
+                        "title": "Title 1",
+                        "description": "A random description"
+                    },
+                    {
+                        "title": "Title 2",
+                        "description": "A random description"
+                    },
+                    {
+                        "title": "Title 3",
+                        "description": "A random description"
+                    }]
                 };
             },
-            computed: {
-                styles() {
-                    return this.happy ? ['happy'] : ['sad']
+            methods: {
+                deletePost(index) {
+                    this.posts.splice(index, 1);
                 }
             },
             watch: {
@@ -32,13 +44,18 @@
                 }
             },
             template: `
-            <div class="container" :class="styles">
+            <div class="container">
                 <div class="centered" v-if="!logged">
                     <h1>Who are you</h1>
                     <input type="text" v-model="username"/>
                 </div>
-                <div v-else>
+                <div class="centered" v-else>
                     Hi, {{ username }}
+                    <div class="post" v-for="(post, key) in posts">
+                        <h3>{{ post.title }}</h3>
+                        <p>{{ post.description }}</p>
+                        <h5 @click="deletePost(key)">DELETE</h5>
+                    </div>
                 </div>
             
                 <button @click="logged = !logged">
@@ -77,19 +94,21 @@
     }
 
     button {
-        margin-top: 24px;
-        border: none;
+        margin-top: 48px;
+        border: 1px solid black;
         background-color: white;
-        padding: 8px 24px;
+        padding: 6px 24px;
         border-radius: 12px;
     }
 
-    .sad {
-        background-color: #c1d2ff;
+    .post {
+        border: 1px solid black;
+        margin: 1.2rem;
+        padding: 6px 24px;
     }
 
-    .happy {
-        background-color: #fffd9a;
+    h5 {
+        cursor: pointer;
     }
 </style>
 
