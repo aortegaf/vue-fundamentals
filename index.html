@@ -12,10 +12,10 @@
     <div id="app"></div>
 
     <script>
-        const vm = Vue.createApp({
+        const app = Vue.createApp({
             data() {
                 return {
-                    username: "",
+                    username: "default",
                     logged: false,
                     posts: [{
                         "title": "Title 1",
@@ -45,10 +45,7 @@
             },
             template: `
             <div class="container">
-                <div class="centered" v-if="!logged">
-                    <h1>Who are you</h1>
-                    <input type="text" v-model="username"/>
-                </div>
+                <login v-model:username="username" v-if="!logged"/>    
                 <div class="centered" v-else>
                     Hi, {{ username }}
                     <div class="post" v-for="(post, key) in posts">
@@ -64,7 +61,27 @@
                 </button>
             </div>
             `,
-        }).mount("#app")  
+        })
+
+        app.component("login", {
+            props: ["username"],
+            methods: {
+                input(e) {
+                    this.$emit("update:username", e.target.value);
+                }
+            },
+            template: `
+            <div class="centered">
+                <h1>Who are you</h1>
+                <input type="text" @input="input"/>
+            </div>
+            `
+        })
+
+
+        const vm = app.mount("#app")
+
+
     </script>
 </body>
 
