@@ -50,11 +50,10 @@
                     Hi {{ username }}
                     <Post v-for="(post, key) in posts" :post="post" :id="key" @delete-post="deletePost"/>
                 </div>
+
+                <LoginButton v-model:logged="logged"/>
             
-                <button @click="logged = !logged">
-                    <div v-if="!logged">Login</div>
-                    <div v-else>Logout</div>                    
-                </button>
+
             </div>
             `,
         })
@@ -87,6 +86,21 @@
                 <p>{{ post.description }}</p>
                 <h5 @click="deletePost(id)">DELETE</h5>
             </div>
+            `
+        })
+
+        app.component("LoginButton", {
+            props: ["logged"],
+            methods: {
+                log(status) {
+                    this.$emit("update:logged", !status)
+                }
+            },
+            template: `
+            <button @click="log(logged)">
+                <div v-if="!logged">Login</div>
+                <div v-else>Logout</div>                    
+            </button>
             `
         })
 
