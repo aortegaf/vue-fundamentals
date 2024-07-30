@@ -34,7 +34,7 @@
             methods: {
                 deletePost(index) {
                     this.posts.splice(index, 1);
-                }
+                },
             },
             watch: {
                 logged(value) {
@@ -45,14 +45,10 @@
             },
             template: `
             <div class="container">
-                <login v-model:username="username" v-if="!logged"/>    
+                <Login v-model:username="username" v-if="!logged"/>    
                 <div class="centered" v-else>
-                    Hi, {{ username }}
-                    <div class="post" v-for="(post, key) in posts">
-                        <h3>{{ post.title }}</h3>
-                        <p>{{ post.description }}</p>
-                        <h5 @click="deletePost(key)">DELETE</h5>
-                    </div>
+                    Hi {{ username }}
+                    <Post v-for="(post, key) in posts" :post="post" :id="key" @delete-post="deletePost"/>
                 </div>
             
                 <button @click="logged = !logged">
@@ -63,7 +59,7 @@
             `,
         })
 
-        app.component("login", {
+        app.component("Login", {
             props: ["username"],
             methods: {
                 input(e) {
@@ -78,10 +74,23 @@
             `
         })
 
+        app.component("Post", {
+            props: ["post", "id"],
+            methods: {
+                deletePost(key) {
+                    this.$emit("delete-post", key)
+                }
+            },
+            template: `
+            <div class="post">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.description }}</p>
+                <h5 @click="deletePost(id)">DELETE</h5>
+            </div>
+            `
+        })
 
         const vm = app.mount("#app")
-
-
     </script>
 </body>
 
