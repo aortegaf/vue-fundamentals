@@ -15,92 +15,32 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    username: "default",
-                    logged: false,
-                    posts: [{
-                        "title": "Title 1",
-                        "description": "A random description"
-                    },
-                    {
-                        "title": "Title 2",
-                        "description": "A random description"
-                    },
-                    {
-                        "title": "Title 3",
-                        "description": "A random description"
-                    }]
                 };
             },
             methods: {
-                deletePost(index) {
-                    this.posts.splice(index, 1);
-                },
-            },
-            watch: {
-                logged(value) {
-                    if (!value) {
-                        this.username = "";
-                    }
-                }
             },
             template: `
             <div class="container">
-                <Login v-model:username="username" v-if="!logged"/>    
-                <div class="centered" v-else>
-                    Hi {{ username }}
-                    <Post v-for="(post, key) in posts" :post="post" :id="key" @delete-post="deletePost"/>
-                </div>
-
-                <LoginButton v-model:logged="logged"/>
-            
-
+                <v-layout>
+                    <template v-slot:title>This title is using a slot </template>
+                    <template v-slot:content>
+                        This is the content This is the content This is the content
+                        This is the content This is the content This is the content
+                        This is the content This is the content This is the content
+                    </template>
+                </v-layout>
             </div>
             `,
         })
 
-        app.component("Login", {
-            props: ["username"],
-            methods: {
-                input(e) {
-                    this.$emit("update:username", e.target.value);
-                }
-            },
+        app.component("v-layout", {
             template: `
-            <div class="centered">
-                <h1>Who are you</h1>
-                <input type="text" @input="input"/>
+            <h1>
+               <slot name="title"></slot>
+            </h1>
+            <div>
+               <slot name="content"></slot>
             </div>
-            `
-        })
-
-        app.component("Post", {
-            props: ["post", "id"],
-            methods: {
-                deletePost(key) {
-                    this.$emit("delete-post", key)
-                }
-            },
-            template: `
-            <div class="post">
-                <h3>{{ post.title }}</h3>
-                <p>{{ post.description }}</p>
-                <h5 @click="deletePost(id)">DELETE</h5>
-            </div>
-            `
-        })
-
-        app.component("LoginButton", {
-            props: ["logged"],
-            methods: {
-                log(status) {
-                    this.$emit("update:logged", !status)
-                }
-            },
-            template: `
-            <button @click="log(logged)">
-                <div v-if="!logged">Login</div>
-                <div v-else>Logout</div>                    
-            </button>
             `
         })
 
@@ -126,29 +66,12 @@
         height: 100%;
     }
 
-    .centered {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-
     button {
         margin-top: 48px;
         border: 1px solid black;
         background-color: white;
         padding: 6px 24px;
         border-radius: 12px;
-    }
-
-    .post {
-        border: 1px solid black;
-        margin: 1.2rem;
-        padding: 6px 24px;
-    }
-
-    h5 {
-        cursor: pointer;
     }
 </style>
 
