@@ -15,35 +15,54 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    items: ["first", "second", "third"]
+                    grandparentText: "I'm the grandparent",
+                    parentText: "I'm the parent",
+                    childText: "I'm the child"
                 };
+            },
+            provide() {
+                return {
+                    parentText: this.parentText,
+                    childText: this.childText
+                }
             },
             template: `
             <div class="container">
-                <ul>
-                    <v-item v-for="item in items" :text="item"></v-item>
-                    <v-item></v-item>
-                </ul>
+                <div class="border-div">
+                    <h2>Grandparent container</h2>
+                    {{ grandparentText }}
+                </div>
+                <v-parent />
             </div>
             `,
         })
 
-        app.component("v-item", {
-            props: {
-                text: {
-                    default: "default"
-                }
-            },
+        app.component("v-parent", {
+            inject: ["parentText"],
             template: `
-            <li>
-               {{ text }}
-            </li>
+                <div class="border-div">
+                    <h3>parent container</h3>
+                    {{ parentText }}
+                </div>
+                <v-child />
+            `
+        })
+
+        app.component("v-child", {
+            inject: ["childText"],
+            template: `
+                <div class="border-div">
+                    <h4>child container</h4>
+                    {{ childText }}
+                </div> 
             `
         })
 
         const vm = app.mount("#app")
     </script>
 </body>
+
+</html>
 
 <style>
     html,
@@ -63,13 +82,13 @@
         height: 100%;
     }
 
-    button {
-        margin-top: 48px;
+    .border-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
         border: 1px solid black;
-        background-color: white;
+        margin: 1.2rem;
         padding: 6px 24px;
-        border-radius: 12px;
     }
 </style>
-
-</html>
